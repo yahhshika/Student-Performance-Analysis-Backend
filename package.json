@@ -1,0 +1,24 @@
+{
+  "name": "studentperformanceanalysisbackend",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/yahhshika/Student-Performance-Analysis-Backend#readme",
+  "bugs": {
+    "url": "https://github.com/yahhshika/Student-Performance-Analysis-Backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yahhshika/Student-Performance-Analysis-Backend.git"
+  },
+  "license": "ISC",
+  "author": "Yashika",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.5.0"
+  }
+}
