@@ -15,6 +15,9 @@ const studentSchema = Joi.object({
   password:Joi.string()
     .required(),
 
+  teacher:Joi.string()
+    .required(),
+
   inputData: Joi.object({
     study_hours_weekly: Joi.number()
       .required(),

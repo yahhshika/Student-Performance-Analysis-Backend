@@ -11,8 +11,18 @@ router.post("/signup",studentSchemaValidation, asyncWrap(async(req,res,next)=>{
 
     let student = req.body;
     const inputData = req.body.inputData;
-  
 
+    let email = student.email;
+    let rollNumber = student.rollNumber;
+    let sameUser = await Student.findOne( {$or: [
+        { email: email },
+        { rollNumber: rollNumber }
+    ]});
+    if(sameUser){
+        throw new ExpressError(400, "email already exists");
+        return;
+    }
+  
     const apiResponse = await fetch(
       "https://student-performance-ml-model.onrender.com/api/predict",
       {
@@ -28,7 +38,6 @@ router.post("/signup",studentSchemaValidation, asyncWrap(async(req,res,next)=>{
     student.input_data = resJson.input_data; 
     student.result = {predictions: resJson.predictions, insights: resJson.insights, success:resJson.success};
     student.predictions = resJson.predictions;
-    student.teacher = "69f09a0f42124656240efe2e";
     
     let password = student.password;
     let hashedPass = await bcrypt.hash(password, 10);
@@ -42,7 +51,7 @@ router.post("/signup",studentSchemaValidation, asyncWrap(async(req,res,next)=>{
     }
     let token = jwt.sign(data, process.env.JWT_PRIVATE_KEY);
     student = finalRes
-    res.send({student, token});
+    res.send({student});
 
 }));
 
@@ -66,7 +75,7 @@ router.post("/login",studentSchemaValidationLogin, asyncWrap( async(req,res,next
     res.send({student,token});
 }));
 
-router.put("/edit",studentSchemaValidationEdit, async(req,res,next)=>{
+router.put("/edit",studentSchemaValidationEdit, asyncWrap(async(req,res,next)=>{
 
 
     let student = req.body;
@@ -101,7 +110,7 @@ router.put("/edit",studentSchemaValidationEdit, async(req,res,next)=>{
     student = await registeredStu.save();
     res.send({student});
 
-})
+}));
 
 router.get("/authenticate",authenticate, asyncWrap(async(req,res,next)=>{
     let data = req.data;

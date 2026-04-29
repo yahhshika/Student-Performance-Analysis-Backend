@@ -1,6 +1,5 @@
 const {studentSchema, studentLoginSchema, studentSchemaEdit} = require("../utils/JoiSchema");
 const ExpressError = require("../utils/ExxpressError");
-
 module.exports.studentSchemaValidation = (req,res,next)=>{
     let student = req.body;
     let response = studentSchema.validate(student);
