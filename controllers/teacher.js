@@ -24,7 +24,7 @@ module.exports.teacherSignUp = async(req,res,next)=>{
     };
     const token = jwt.sign(data, process.env.JWT_PRIVATE_KEY);
 
-    res.send({teacher,token});
+    res.send({teacher});
 }
 
 module.exports.teacherLogin =  async(req,res,next)=>{
@@ -40,14 +40,15 @@ module.exports.teacherLogin =  async(req,res,next)=>{
 
     let isMatch = await bcrypt.compare(teacher.password, regTeacher.password);
     if(!isMatch){
-        throw new ExpressError(400, "Invalid email or password")
+        throw new ExpressError(400, "Invalid email or password");
+        return;
     }
     let data = {
         teacherId : regTeacher._id,
     }
     const token = jwt.sign(data, process.env.JWT_PRIVATE_KEY);
     teacher = regTeacher;
-    res.send({teacher, token});
+    res.send({teacher});
 }
 
 module.exports.teacherStudents = async(req,res,next)=>{
