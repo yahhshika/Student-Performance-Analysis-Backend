@@ -67,10 +67,10 @@ module.exports.studentSignUp = async(req,res,next)=>{
     let token = jwt.sign(data, process.env.JWT_PRIVATE_KEY);
     student = finalRes
 
-    res.cookie("token",token,{
+    res.cookie("token", token, {
         httpOnly: true,
-        sameSite: "lax",
-        secure: false,
+        sameSite: "none",  
+        secure: true,       
         maxAge: 7 * 24 * 60 * 60 * 1000
     });
     res.send({student});
@@ -94,10 +94,10 @@ module.exports.studentLogIn = async(req,res,next)=>{
         userId: registeredStu._id
     }
     let token = jwt.sign(data, process.env.JWT_PRIVATE_KEY);
-    res.cookie("token",token,{
+    res.cookie("token", token, {
         httpOnly: true,
-        sameSite: "lax",
-        secure: false,
+        sameSite: "none",  
+        secure: true,       
         maxAge: 7 * 24 * 60 * 60 * 1000
     });
     student = registeredStu
