@@ -84,6 +84,7 @@ const studentSchemaEdit = Joi.object({
   email: Joi.string()
     .email()
     .required(),
+  teacher: Joi.string().required(),
 
   inputData: Joi.object({
     study_hours_weekly: Joi.number()
