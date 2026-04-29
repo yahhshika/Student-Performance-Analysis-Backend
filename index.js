@@ -1,3 +1,8 @@
+if(process.env.NODE_ENV != "production"){
+    require("dotenv").config();
+}
+console.log(process.env.JWT_PRIVATE_KEY);
+
 const connectFn = require("./mongoDbConnect");
 connectFn().then(()=>{console.log("successfully connected to db")}).catch(err=>{console.log("err in connecting to db: "+err)});
 const ExpressError = require("./utils/ExxpressError");
