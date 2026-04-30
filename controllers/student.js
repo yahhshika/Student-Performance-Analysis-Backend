@@ -2,21 +2,7 @@ const ExpressError = require("../utils/ExxpressError");
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt");
 const Student = require("../models/student");
-module.exports.authenticate = (req,res,next)=>{
-    let {token} = req.cookies;
-    if(!token){
-        throw new ExpressError(400, "Kindly login/signup")
-        return;
-    }
-    try{
 
-        let data = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
-        req.data = data;
-        next();
-    }catch(err){
-        next(err);
-    }
-}
 
 module.exports.studentSignUp = async(req,res,next)=>{
 

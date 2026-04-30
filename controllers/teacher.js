@@ -4,6 +4,7 @@ const Teacher = require("../models/teacher");
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const Student = require("../models/student");
+
 module.exports.teacherSignUp = async(req,res,next)=>{
     let teacher = req.body;
     let email = teacher.email;
@@ -24,6 +25,13 @@ module.exports.teacherSignUp = async(req,res,next)=>{
     };
     const token = jwt.sign(data, process.env.JWT_PRIVATE_KEY);
 
+    res.cookie("token", token, {
+        secure: true,
+        sameSite:"none",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+
+    })
     res.send({teacher});
 }
 
@@ -47,6 +55,13 @@ module.exports.teacherLogin =  async(req,res,next)=>{
         teacherId : regTeacher._id,
     }
     const token = jwt.sign(data, process.env.JWT_PRIVATE_KEY);
+    res.cookie("token", token, {
+        secure: true,
+        sameSite:"none",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+
+    })
     teacher = regTeacher;
     res.send({teacher});
 }
@@ -57,4 +72,8 @@ module.exports.teacherStudents = async(req,res,next)=>{
 
     res.send({students});
 
+}
+module.exports.teachers = async(req,res,next)=>{
+    let teachers = await Teacher.find();
+    res.send({teachers});
 }

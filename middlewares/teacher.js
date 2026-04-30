@@ -22,13 +22,3 @@ module.exports.teacherLoginSchemaValidate = (req,res,next)=>{
     
 }
 
-module.exports.isLoggedIn = (req,res,next)=>{
-    let token = req.headers.token;
-    if(!token){
-        throw new ExpressError(400, "login/signup to access");
-        return;
-    }
-    let data = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
-    req.data = data;
-    next();
-}
