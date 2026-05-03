@@ -32,6 +32,10 @@ module.exports.teacherSignUp = async(req,res,next)=>{
         httpOnly: true
 
     })
+
+    //delete password before sending.
+    teacher = teacher.toObject();
+    delete teacher.password;
     res.send({teacher});
 }
 
@@ -62,18 +66,20 @@ module.exports.teacherLogin =  async(req,res,next)=>{
         httpOnly: true
 
     })
-    teacher = regTeacher;
+
+    teacher = regTeacher.toObject();
+    delete teacher.password;
     res.send({teacher});
 }
 
 module.exports.teacherStudents = async(req,res,next)=>{
     let teacherId = req.data.teacherId;
-    let students = await Student.find({teacher:teacherId});
+    let students = await Student.find({teacher:teacherId}).select("-password");
 
     res.send({students});
 
 }
 module.exports.teachers = async(req,res,next)=>{
-    let teachers = await Teacher.find();
+    let teachers = await Teacher.find().select("-password");
     res.send({teachers});
 }

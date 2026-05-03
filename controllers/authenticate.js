@@ -2,7 +2,7 @@ const ExpressError = require("../utils/ExxpressError");
 const jwt = require("jsonwebtoken");
 
 module.exports.authenticate = (req,res,next)=>{
-    let {token} = req.cookies;
+    let token = req.cookies?.token || req.headers?.token;
     if(!token){
         throw new ExpressError(400, "Kindly login/signup")
         return;

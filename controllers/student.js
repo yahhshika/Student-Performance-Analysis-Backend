@@ -38,7 +38,6 @@ module.exports.studentSignUp = async(req,res,next)=>{
     let resJson = await apiResponse.json();
     student.input_data = resJson.input_data; 
     student.result = {predictions: resJson.predictions, insights: resJson.insights, success:resJson.success};
-    student.predictions = resJson.predictions;
     
     let password = student.password;
     let hashedPass = await bcrypt.hash(password, 10);
@@ -51,7 +50,8 @@ module.exports.studentSignUp = async(req,res,next)=>{
         userId: newStudent._id 
     }
     let token = jwt.sign(data, process.env.JWT_PRIVATE_KEY);
-    student = finalRes
+    student = finalRes.toObject();
+    delete student.password;
 
     res.cookie("token", token, {
         httpOnly: true,
@@ -86,7 +86,8 @@ module.exports.studentLogIn = async(req,res,next)=>{
         secure: true,       
         maxAge: 7 * 24 * 60 * 60 * 1000
     });
-    student = registeredStu
+    student = registeredStu.toObject();
+    delete student.password;
     res.send({student});
 }
 
@@ -101,8 +102,7 @@ module.exports.studentEdit = async(req,res,next)=>{
         throw new ExpressError(400, "No such student found");
         return;
     }
-    console.log(registeredStu._id);
-    console.log(req.data.userId);
+
     if(!registeredStu._id.equals(req.data.userId)){
         throw new ExpressError(401, "unauthorized access");
         return;
@@ -130,6 +130,8 @@ module.exports.studentEdit = async(req,res,next)=>{
     student.result = {predictions: resJson.predictions, insights: resJson.insights, success:resJson.success};
     registeredStu.set(student);
     student = await registeredStu.save();
+    student = student.toObject();
+    delete student.password;
     res.send({student});
 
 }
@@ -142,6 +144,8 @@ module.exports.authenticateRouteHandling = async(req,res,next)=>{
         throw new ExpressError(400, "No such user found");
         return;
     }
-    let student = registeredStu;
+    let student = registeredStu.toObject();
+    delete student.password;
+
     res.send({student})
 }
