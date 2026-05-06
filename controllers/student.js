@@ -36,7 +36,7 @@ module.exports.studentSignUp = async(req,res,next)=>{
     }
 
     let resJson = await apiResponse.json();
-    student.input_data = resJson.input_data; 
+    student.input_data = resJson.input_received; 
     student.result = {predictions: resJson.predictions, insights: resJson.insights, success:resJson.success};
     
     let password = student.password;
@@ -44,7 +44,6 @@ module.exports.studentSignUp = async(req,res,next)=>{
     student.password = hashedPass;
     let newStudent = new Student(student);
     let finalRes = await newStudent.save();
-
     //authentication:
     let data = {
         userId: newStudent._id 
