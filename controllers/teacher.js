@@ -83,3 +83,9 @@ module.exports.teachers = async(req,res,next)=>{
     let teachers = await Teacher.find().select("-password");
     res.send({teachers});
 }
+
+module.exports.getAvailableTeacher = async(req,res,next)=>{
+    let teacherId = req.data.teacherId;
+    let teacher = await Teacher.findById(teacherId).select("-password");
+    res.send({teacher});
+}

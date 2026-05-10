@@ -7,7 +7,7 @@ const Teacher = require("../models/teacher");
 const jwt = require("jsonwebtoken");
 const ExpressError = require("../utils/ExxpressError");
 const Student = require("../models/student");
-const {teacherSignUp, teacherLogin, teacherStudents,teachers} = require("../controllers/teacher");
+const {teacherSignUp, teacherLogin, teacherStudents,teachers, getAvailableTeacher} = require("../controllers/teacher");
 const { authenticate, logout } = require("../controllers/authenticate");
 
 router.get('/',asyncWrap(teachers));
@@ -17,6 +17,8 @@ router.post("/signup",teacherSignUpSchemaValidate, asyncWrap(teacherSignUp));
 router.post("/login",teacherLoginSchemaValidate,asyncWrap(teacherLogin));
 
 router.get("/students",authenticate,asyncWrap(teacherStudents));
+
+router.get("/teacher", authenticate, asyncWrap(getAvailableTeacher));
 
 router.get("/logout",authenticate,logout);
 
