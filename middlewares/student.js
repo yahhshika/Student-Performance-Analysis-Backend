@@ -1,4 +1,4 @@
-const {studentSchema, studentLoginSchema, studentSchemaEdit} = require("../utils/JoiSchema");
+const {studentSchema, studentLoginSchema, studentSchemaEdit,metaDataSchema} = require("../utils/JoiSchema");
 const ExpressError = require("../utils/ExxpressError");
 module.exports.studentSchemaValidation = (req,res,next)=>{
     let student = req.body;
@@ -11,9 +11,20 @@ module.exports.studentSchemaValidation = (req,res,next)=>{
     
 }
 
-module.exports.studentSchemaValidationLogin = (req,res,next)=>{
+module.exports.metaDataSchemaValidation = (req,res,next)=>{
     let student = req.body;
-    let response = studentLoginSchema.validate(student);
+    let response = metaDataSchema.validate(student);
+    if(response.error){
+        let errMsg = response.error.details.map(e=>e.message).join(", ");
+        return next(new ExpressError(400,errMsg));
+    }
+    next();
+    
+}
+
+module.exports.studentSchemaValidationLogin = (req,res,next)=>{
+    let metaData = req.body;
+    let response = studentLoginSchema.validate(metaData);
     if(response.error){
         let errMsg = response.error.details.map(e=>e.message).join(", ");
         return next(new ExpressError(400,errMsg));

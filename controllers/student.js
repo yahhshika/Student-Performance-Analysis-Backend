@@ -7,8 +7,6 @@ const Student = require("../models/student");
 module.exports.studentSignUp = async(req,res,next)=>{
 
     let student = req.body;
-    const inputData = req.body.inputData;
-
     let email = student.email;
     let rollNumber = student.rollNumber;
     let sameUser = await Student.findOne( {$or: [
@@ -20,25 +18,7 @@ module.exports.studentSignUp = async(req,res,next)=>{
         return;
     }
   
-    const apiResponse = await fetch(
-      "https://student-performance-ml-model.onrender.com/api/predict",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(inputData)
-      }
-    );
-      if (!apiResponse.ok) {
-        throw new ExpressError(500, "ML service failed");
-        return;
-    }
-
-    let resJson = await apiResponse.json();
-    student.input_data = resJson.input_received; 
-    student.result = {predictions: resJson.predictions, insights: resJson.insights, success:resJson.success};
-    
+    //authentication
     let password = student.password;
     let hashedPass = await bcrypt.hash(password, 10);
     student.password = hashedPass;
@@ -92,22 +72,15 @@ module.exports.studentLogIn = async(req,res,next)=>{
 
 module.exports.studentEdit = async(req,res,next)=>{
 
+    let userId = req.data.userId;
 
-    let student = req.body;
-    delete student.password;
-    let email = student.email;
-    let registeredStu = await Student.findOne({email});
+    let registeredStu = await Student.findById(userId).select("-password");
     if(!registeredStu){
         throw new ExpressError(400, "No such student found");
         return;
     }
 
-    if(!registeredStu._id.equals(req.data.userId)){
-        throw new ExpressError(401, "unauthorized access");
-        return;
-    }
-
-    let inputData = req.body.inputData;
+    let inputData = req.body;
     const apiResponse = await fetch(
       "https://student-performance-ml-model.onrender.com/api/predict",
       {
@@ -125,10 +98,10 @@ module.exports.studentEdit = async(req,res,next)=>{
 
     let resJson = await apiResponse.json();
 
-    student.input_data = resJson.input_received; 
-    student.result = {predictions: resJson.predictions, insights: resJson.insights, success:resJson.success};
-    registeredStu.set(student);
-    student = await registeredStu.save();
+    registeredStu.input_data = resJson.input_received; 
+    registeredStu.result = {predictions: resJson.predictions, insights: resJson.insights, success:resJson.success};
+
+    let student = await registeredStu.save();
     student = student.toObject();
     delete student.password;
     res.send({student});
@@ -147,4 +120,41 @@ module.exports.authenticateRouteHandling = async(req,res,next)=>{
     delete student.password;
 
     res.send({student})
+}
+
+module.exports.studentPrediction = async(req,res,next)=>{
+    let userId = req.data.userId;
+    let student = await Student.findById(userId).select("-password");
+    if(!student){
+        throw new ExpressError(400, "User Not Found");
+        return;
+    }
+
+
+    const inputData = req.body;
+    const apiResponse = await fetch(
+      "https://student-performance-ml-model.onrender.com/api/predict",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(inputData)
+      }
+    );
+      if (!apiResponse.ok) {
+        throw new ExpressError(500, "ML service failed");
+        return;
+    }
+
+    let resJson = await apiResponse.json();
+    student.input_data = resJson.input_received; 
+    student.result = {predictions: resJson.predictions, insights: resJson.insights, success:resJson.success};
+
+    student = await student.save();
+    student.toObject();
+    delete student.password;
+    res.send({student});
+    
+
 }

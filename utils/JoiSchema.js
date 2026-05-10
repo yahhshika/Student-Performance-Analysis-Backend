@@ -17,127 +17,119 @@ const studentSchema = Joi.object({
 
   teacher:Joi.string()
     .required(),
+}).required();
 
-  inputData: Joi.object({
-    study_hours_weekly: Joi.number()
-      .required(),
 
-    attendance_pct: Joi.number()
-      .min(0)
-      .max(100)
-      .required(),
+const metaDataSchema = Joi.object({
 
-    previous_cgpa: Joi.number()
-      .min(0)
-      .max(10)
-      .required(),
+ 
+  study_hours_weekly: Joi.number()
+    .required(),
 
-    sleep_hours: Joi.number()
-      .required(),
+  attendance_pct: Joi.number()
+    .min(0)
+    .max(100)
+    .required(),
 
-    mental_health_score: Joi.number()
-      .min(1)
-      .max(10)
-      .required(),
+  previous_cgpa: Joi.number()
+    .min(0)
+    .max(10)
+    .required(),
 
-    has_part_time_job: Joi.number()
-      .valid(0, 1)
-      .required(),
+  sleep_hours: Joi.number()
+    .required(),
 
-    extracurricular: Joi.string()
-      .valid(
-        "Sports",
-        "Cultural",
-        "Multiple",
-        "No Activity",
-        "Technical Club"
-      )
-      .required(),
+  mental_health_score: Joi.number()
+    .min(1)
+    .max(10)
+    .required(),
 
-    department: Joi.string()
-      .valid(
-        "Electronics",
-        "Computer Science",
-        "Mechanical",
-        "Information Technology",
-        "Civil"
-      )
-      .required(),
+  has_part_time_job: Joi.number()
+    .valid(0, 1)
+    .required(),
 
-    semester: Joi.number()
-      .integer()
-      .min(1)
-      .max(8)
-      .required()
-  }).required()
+  extracurricular: Joi.string()
+    .valid(
+      "Sports",
+      "Cultural",
+      "Multiple",
+      "No Activity",
+      "Technical Club"
+    )
+    .required(),
+
+  department: Joi.string()
+    .valid(
+      "Electronics",
+      "Computer Science",
+      "Mechanical",
+      "Information Technology",
+      "Civil"
+    )
+    .required(),
+
+  semester: Joi.number()
+    .integer()
+    .min(1)
+    .max(8)
+    .required()
+
 }).required();
 
 const studentSchemaEdit = Joi.object({
-  name: Joi.string()
-    .min(2)
+
+
+  study_hours_weekly: Joi.number()
     .required(),
 
-  rollNumber: Joi.string()
-    .alphanum()
+  attendance_pct: Joi.number()
+    .min(0)
+    .max(100)
     .required(),
 
-  email: Joi.string()
-    .email()
+  previous_cgpa: Joi.number()
+    .min(0)
+    .max(10)
     .required(),
-  teacher: Joi.string().required(),
 
-  inputData: Joi.object({
-    study_hours_weekly: Joi.number()
-      .required(),
+  sleep_hours: Joi.number()
+    .required(),
 
-    attendance_pct: Joi.number()
-      .min(0)
-      .max(100)
-      .required(),
+  mental_health_score: Joi.number()
+    .min(1)
+    .max(10)
+    .required(),
 
-    previous_cgpa: Joi.number()
-      .min(0)
-      .max(10)
-      .required(),
+  has_part_time_job: Joi.number()
+    .valid(0, 1)
+    .required(),
 
-    sleep_hours: Joi.number()
-      .required(),
+  extracurricular: Joi.string()
+    .valid(
+      "Sports",
+      "Cultural",
+      "Multiple",
+      "No Activity",
+      "Technical Club"
+    )
+    .required(),
 
-    mental_health_score: Joi.number()
-      .min(1)
-      .max(10)
-      .required(),
+  department: Joi.string()
+    .valid(
+      "Electronics",
+      "Computer Science",
+      "Mechanical",
+      "Information Technology",
+      "Civil"
+    )
+    .required(),
 
-    has_part_time_job: Joi.number()
-      .valid(0, 1)
-      .required(),
-
-    extracurricular: Joi.string()
-      .valid(
-        "Sports",
-        "Cultural",
-        "Multiple",
-        "No Activity",
-        "Technical Club"
-      )
-      .required(),
-
-    department: Joi.string()
-      .valid(
-        "Electronics",
-        "Computer Science",
-        "Mechanical",
-        "Information Technology",
-        "Civil"
-      )
-      .required(),
-
-    semester: Joi.number()
-      .integer()
-      .min(1)
-      .max(8)
-      .required()
-  }).required()
+  semester: Joi.number()
+    .integer()
+    .min(1)
+    .max(8)
+    .required()
+ 
 }).required();
 
 let studentLoginSchema = Joi.object({
@@ -145,4 +137,4 @@ let studentLoginSchema = Joi.object({
     password:Joi.string().required(),
 }).required();
 
-module.exports = {studentSchema, studentLoginSchema, studentSchemaEdit};
+module.exports = {studentSchema, studentLoginSchema, studentSchemaEdit, metaDataSchema};
