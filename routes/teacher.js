@@ -10,13 +10,13 @@ const Student = require("../models/student");
 const {teacherSignUp, teacherLogin, teacherStudents,teachers} = require("../controllers/teacher");
 const { authenticate, logout } = require("../controllers/authenticate");
 
-router.get('/',authenticate,asyncWrap(teachers));
+router.get('/',asyncWrap(teachers));
 
 router.post("/signup",teacherSignUpSchemaValidate, asyncWrap(teacherSignUp));
 
 router.post("/login",teacherLoginSchemaValidate,asyncWrap(teacherLogin));
 
-router.get("/students",asyncWrap(teacherStudents));
+router.get("/students",authenticate,asyncWrap(teacherStudents));
 
 router.get("/logout",authenticate,logout);
 
