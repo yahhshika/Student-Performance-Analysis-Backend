@@ -66,6 +66,11 @@ module.exports.studentLogIn = async(req,res,next)=>{
         maxAge: 7 * 24 * 60 * 60 * 1000
     });
     student = registeredStu.toObject();
+    if(student.input_data?.previous_cgpa){
+        student.input_data.previous_cgpa = parseFloat(
+            student.input_data.previous_cgpa.toString()
+        );
+    }
     delete student.password;
     res.send({student});
 }
@@ -103,6 +108,11 @@ module.exports.studentEdit = async(req,res,next)=>{
 
     let student = await registeredStu.save();
     student = student.toObject();
+    if(student.input_data?.previous_cgpa){
+        student.input_data.previous_cgpa = parseFloat(
+            student.input_data.previous_cgpa.toString()
+        );
+    }
     delete student.password;
     res.send({student});
 
@@ -118,7 +128,11 @@ module.exports.authenticateRouteHandling = async(req,res,next)=>{
     }
     let student = registeredStu.toObject();
     delete student.password;
-
+    if(student.input_data?.previous_cgpa){
+        student.input_data.previous_cgpa = parseFloat(
+            student.input_data.previous_cgpa.toString()
+        );
+    }
     res.send({student})
 }
 
@@ -152,7 +166,12 @@ module.exports.studentPrediction = async(req,res,next)=>{
     student.result = {predictions: resJson.predictions, insights: resJson.insights, success:resJson.success};
 
     student = await student.save();
-    student.toObject();
+    student = student.toObject();
+    if(student.input_data?.previous_cgpa){
+        student.input_data.previous_cgpa = parseFloat(
+            student.input_data.previous_cgpa.toString()
+        );
+    }
     delete student.password;
     res.send({student});
     

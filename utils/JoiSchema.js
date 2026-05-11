@@ -24,7 +24,7 @@ const metaDataSchema = Joi.object({
 
  
   study_hours_weekly: Joi.number()
-    .required(),
+    .min(0).max(168).required(),
 
   attendance_pct: Joi.number()
     .min(0)
@@ -37,7 +37,7 @@ const metaDataSchema = Joi.object({
     .required(),
 
   sleep_hours: Joi.number()
-    .required(),
+    .min(0).max(24).required(),
 
   mental_health_score: Joi.number()
     .min(1)
@@ -80,7 +80,7 @@ const studentSchemaEdit = Joi.object({
 
 
   study_hours_weekly: Joi.number()
-    .required(),
+    .min(0).max(168).required(),
 
   attendance_pct: Joi.number()
     .min(0)
@@ -93,7 +93,7 @@ const studentSchemaEdit = Joi.object({
     .required(),
 
   sleep_hours: Joi.number()
-    .required(),
+    .min(0).max(24).required(),
 
   mental_health_score: Joi.number()
     .min(1)

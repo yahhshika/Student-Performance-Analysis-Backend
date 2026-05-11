@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const inputSchema = new mongoose.Schema({
   study_hours_weekly: Number,
   attendance_pct: Number,
-  previous_cgpa: Number,
+  previous_cgpa: mongoose.Schema.Types.Decimal128,
   sleep_hours: Number,
   mental_health_score: Number,
   has_part_time_job: Number,
