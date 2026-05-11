@@ -75,6 +75,17 @@ module.exports.teacherLogin =  async(req,res,next)=>{
 module.exports.teacherStudents = async(req,res,next)=>{
     let teacherId = req.data.teacherId;
     let students = await Student.find({teacher:teacherId}).select("-password");
+    students = students.map(student=>{
+
+        student = student.toObject();
+        if(student.input_data?.previous_cgpa){
+            student.input_data.previous_cgpa = parseFloat(
+                student.input_data.previous_cgpa.toString()
+            );
+            return student;
+        }
+        return student;
+    })
 
     res.send({students});
 
